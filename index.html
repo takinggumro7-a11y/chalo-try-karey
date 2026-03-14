@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Masti Quiz Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; touch-action: manipulation; }
+        body {
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
+            height: 100vh; background: #0f0f1a; color: #ffffff;
+            font-family: 'Poppins', sans-serif; overflow: hidden; text-align: center;
+        }
+        .container {
+            width: 90%; max-width: 500px; padding: 40px;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 1.8rem; margin-bottom: 30px; color: #f1c40f; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        button {
+            padding: 15px; font-size: 1rem; font-weight: 700; cursor: pointer;
+            border: none; border-radius: 12px; transition: background 0.2s;
+            text-transform: uppercase;
+        }
+        .yes-btn { background: #27ae60; color: white; }
+        .no-btn, .troll-btn { background: #c0392b; color: white; position: relative; }
+        .correct-btn { background: #2980b9; color: white; }
+        .selected { background: #27ae60 !important; }
+        #next-btn, #finish-btn { grid-column: span 2; margin-top: 20px; background: #f1c40f; color: #121212; display: none; }
+        .hidden { display: none !important; }
+        #certificate {
+            background: #fff; color: #333; padding: 30px; border: 10px double #d4af37;
+            font-family: 'Cinzel', serif; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        .cert-name { font-size: 2.2rem; border-bottom: 2px solid #333; display: inline-block; margin: 10px 0; color: #111; }
+        .download-btn { margin-top: 20px; background: #333; color: gold; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <audio id="faak-sound" src="faak_meme.mp3" preload="auto"></audio>
+    <audio id="laugh-sound" src="funny_laugh.mp3" preload="auto"></audio>
+
+    <div id="stage1" class="container">
+        <h1>Shuru karey Tora masti?</h1>
+        <div class="btn-group">
+            <button class="yes-btn" onclick="nextStage(2)">YES</button>
+            <button class="no-btn" onmouseover="moveButton(this)" onclick="playFaak()" ontouchstart="moveButton(this)">NO</button>
+        </div>
+    </div>
+
+    <div id="stage2" class="container hidden">
+        <h1>SABSE BARA CHODU KON?</h1>
+        <div class="btn-group">
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">RAJ</button>
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">RAJE</button>
+            <button class="correct-btn" onclick="showNextBtn('next-btn', this)">ALIP</button>
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">TAKING</button>
+            <button id="next-btn" onclick="nextStage(3)">Next Question ➡</button>
+        </div>
+    </div>
+
+    <div id="stage3" class="container hidden">
+        <h1>KON GAY HAI?</h1>
+        <div class="btn-group">
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">RAJ</button>
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">RAJE</button>
+            <button class="correct-btn" onclick="showNextBtn('finish-btn', this)">ALIP</button>
+            <button class="troll-btn" onmouseover="moveButton(this)" ontouchstart="moveButton(this)" onclick="playFaak()">TAKING</button>
+            <button id="finish-btn" onclick="showCertificate()">View Result 🏆</button>
+        </div>
+    </div>
+
+    <div id="stage4" class="container hidden" style="background:none; border:none; box-shadow:none;">
+        <div id="certificate">
+            <div style="color:#d4af37">OFFICIAL CERTIFICATE</div>
+            <p>This is to certify that</p>
+            <div class="cert-name">ALIP</div>
+            <p>has officially been voted as the biggest</p>
+            <div style="font-weight:bold; color:#c0392b;">CHODU & GAY</div>
+            <p>by the Tora Masti Council.</p>
+        </div>
+        <button class="download-btn" onclick="window.print()">Download & Share</button>
+    </div>
+
+    <script>
+        function moveButton(btn) {
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 40);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 40);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.zIndex = '999';
+        }
+
+        function playFaak() {
+            const audio = document.getElementById('faak-sound');
+            audio.currentTime = 0;
+            audio.play().catch(() => {}); 
+        }
+
+        function nextStage(num) {
+            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+            document.getElementById('stage' + num).classList.remove('hidden');
+        }
+
+        function showNextBtn(id, btn) {
+            btn.classList.add('selected');
+            btn.innerHTML = "ALIP ✅";
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function showCertificate() {
+            document.getElementById('laugh-sound').play().catch(() => {});
+            nextStage(4);
+        }
+    </script>
+</body>
+</html>
